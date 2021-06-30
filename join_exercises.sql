@@ -17,11 +17,10 @@ FROM roles
 RIGHT JOIN users ON roles.id = users.id;
 
 -- 3. Although not explicitly covered in the lesson, aggregate functions like count can be used with join queries. Use count and the appropriate join type to get a list of roles along with the number of users that has the role. Hint: You will also need to use group by in the query.
-SELECT COUNT (role_id)
-FROM roles
-JOIN users ON roles.id = users.id
-GROUP BY role_id;
-
+SELECT roles.name AS Role_Name, COUNT(role_id) AS Number_Users
+From users
+RIGHT JOIN roles ON roles.id = users.role_id 
+GROUP BY Role_Name;
 
 -- 2. Using the example in the Associative Table Joins section as a guide, write a query that shows each department along with the name of the current manager for that department.
 SELECT dept_name AS Department_Name, # selects the department name, renames and puts it in the first column
@@ -112,14 +111,14 @@ JOIN departments ON departments.dept_no = dept_manager.dept_no
 WHERE dept_name = 'Marketing' AND salaries.to_date > CURDATE() AND dept_manager.to_date > CURDATE();
 
 -- 10. Bonus Find the names of all current employees, their department name, and their current manager's name.
-SELECT CONCAT(first_name, last_name) AS Employee_Name, dept_name AS Department_Name, CONCAT(first_name, last_name) AS Manager_Name
+
+SELECT CONCAT(employees.first_name, " ", employees.last_name) AS Employee_Name, dept_name AS Department_Name, CONCAT(me.first_name, " ", me.last_name) AS Manager_Name
 FROM employees
 JOIN dept_emp ON dept_emp.emp_no = employees.emp_no
 JOIN departments ON departments.dept_no = dept_emp.dept_no
 JOIN dept_manager ON dept_manager.dept_no = departments.dept_no
-LIMIT 5;
-
-
+JOIN employees AS me ON me.emp_no = dept_manager.emp_no # Created an alias to join employees table on itself to create Manager_Name column
+WHERE dept_emp.to_date > CURDATE() AND dept_manager.to_date > CURDATE();
 
 -- 11. Bonus Who is the highest paid employee within each department.
 
