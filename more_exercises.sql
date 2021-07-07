@@ -73,3 +73,65 @@ FROM country
 GROUP BY region
 ORDER BY num_countries;
 
+-- What is the population for each region?
+SELECT region AS Region, SUM(population) AS Population #Sums the population
+FROM country
+GROUP BY Region #by Region
+ORDER BY Population DESC;
+
+-- What is the population for each continent?
+SELECT continent AS Continent, SUM(population) AS Population
+FROM country
+GROUP BY Continent
+ORDER BY Population DESC;
+
+-- What is the average life expectancy globally?
+SELECT AVG(LifeExpectancy)
+FROM country;
+
+-- What is the average life expectancy for each region, each continent? Sort the results from shortest to longest
+SELECT continent, AVG(LifeExpectancy) AS Life_Expectancy #by Continent
+FROM country
+GROUP BY continent
+ORDER BY Life_Expectancy;
+
+SELECT region, AVG(LifeExpectancy) AS Life_Expectancy #by Region
+FROM country
+GROUP BY region
+ORDER BY Life_Expectancy;
+
+-- BONUS Questions
+-- Find all the countries whose local name is different from the official name
+SELECT name, localname
+FROM country
+WHERE name != localname;
+
+-- How many countries have a life expectancy less than x?
+SELECT name, LifeExpectancy
+FROM country
+WHERE LifeExpectancy < 40;
+
+-- What state is city x located in?
+SELECT country.name AS State, city.name AS City
+FROM country
+JOIN city ON country.code = city.countrycode
+WHERE city.name = 'Santa Rosa';
+
+-- What region of the world is city x located in?
+SELECT country.name AS State, country.region AS Region, city.name AS City
+FROM country
+JOIN city ON country.code = city.countrycode
+WHERE city.name = 'Santa Rosa';
+
+-- What country (use the human readable name) city x located in?
+
+
+-- What is the life expectancy in city x?
+SELECT LifeExpectancy, city.name
+FROM country
+JOIN city ON country.code = city.countrycode
+WHERE city.name = 'Santa Rosa';
+
+
+
+
